@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviation V-Speed Quiz</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #0056b3;
+            margin-bottom: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            font-size: 18px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .vspeeds {
+            margin-top: 20px;
+            text-align: left;
+            display: none;
+        }
+
+        .vspeeds ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        .vspeeds li {
+            background: #e9f2ff;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Aviation V-Speed Quiz</h1>
+
+        <label for="aircraft">Select Aircraft:</label>
+        <select id="aircraft" onchange="updateAircraft()">
+            <option value="Sling2" {% if aircraft == 'Sling2' %}selected{% endif %}>Sling2</option>
+            <option value="RV12" {% if aircraft == 'RV12' %}selected{% endif %}>RV12</option>
+        </select>
+
+        <form method="POST">
+            <h3>What is the speed for <strong>{{ question }}</strong>?</h3>
+            <input type="hidden" name="question" value="{{ question }}">
+            <input type="hidden" name="correct_answer" value="{{ v_speeds[aircraft][question] }}">
+            <input type="hidden" name="aircraft" id="selectedAircraft" value="{{ aircraft }}">
+            <input type="number" name="answer" placeholder="Enter speed in knots" required>
+            <br>
+            <button type="submit">Submit Answer</button>
+        </form>
+
+        {% if message %}
+            <div class="message" style="color: {{ message.color }};">{{ message.text }}</div>
+        {% endif %}
+
+        <button onclick="showVspeeds()">Show All V-Speeds</button>
+        <div class="vspeeds" id="vspeedsContainer">
+            <h3>{{ aircraft }} V-Speeds</h3>
+            <ul id="vspeedsList"></ul>
+        </div>
+    </div>
+
+    <script>
+        function updateAircraft() {
+            let aircraft = document.getElementById("aircraft").value;
+            window.location.href = `/?aircraft=${aircraft}`;
+        }
+
+        function showVspeeds() {
+            let aircraft = document.getElementById("aircraft").value;
+            fetch(`/vspeeds?aircraft=${aircraft}`)
+                .then(response => response.json())
+                .then(data => {
+                    let list = document.getElementById("vspeedsList");
+                    list.innerHTML = "";
+                    for (let speed in data) {
+                        let item = document.createElement("li");
+                        item.textContent = `${speed}: ${data[speed]} knots`;
+                        list.appendChild(item);
+                    }
+                    document.getElementById("vspeedsContainer").style.display = "block";
+                });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+# Aviation V-Speed Quiz
+
+## Overview
+The Aviation V-Speed Quiz is a simple web application built using Flask that helps users learn and test their knowledge of V-speeds for different aircraft. Users can select an aircraft, answer questions about its V-speeds, and view all stored V-speeds for reference.
+
+## Features
+- Supports multiple aircraft (Sling2 and RV12)
+- Randomly generates quiz questions based on selected aircraft
+- Provides instant feedback on answers
+- Displays all V-speeds for selected aircraft
+- User-friendly and responsive UI
+
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/aviation-vspeed-quiz.git
+   cd aviation-vspeed-quiz
+   ```
+2. Install dependencies:
+   ```bash
+   pip install flask
+   ```
+3. Run the application:
+   ```bash
+   python app.py
+   ```
+4. Open your browser and go to:
+   ```
+   http://127.0.0.1:5000
+   ```
+
+## How to Edit the Code
+### Modifying V-Speeds
+You can update the V-speeds in `app.py` under the `v_speeds` dictionary:
+```python
+v_speeds = {
+    "Sling2": {
+        "Vx": 65,
+        "Vr": 55,
+        "Vy": 75,
+        "Vne": 160,
+        "Vno": 129,
+        "Vs": 48,
+        "Vso": 40
+    },
+    "RV12": {
+        "Vx": 60,
+        "Vr": 50,
+        "Vy": 70,
+        "Vne": 140,
+        "Vno": 120,
+        "Vs": 45,
+        "Vso": 37
+    }
+}
+```
+
+### Changing the UI
+The `templates/quiz.html` file contains the HTML structure. You can edit styles and layout inside this file.
+
+## API Endpoints
+- **GET /** – Displays the quiz page
+- **POST /** – Submits an answer and returns feedback
+- **GET /vspeeds?aircraft=Sling2** – Returns the V-speeds for the selected aircraft in JSON format
+
+
+---
+For any issues or improvements, feel free to submit a pull request or open an issue on GitHub.
+
